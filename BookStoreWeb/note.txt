@@ -1,0 +1,4 @@
+NuGET Manager Console
+
+update-database  
+add-migration AddCategoryTableToDb
