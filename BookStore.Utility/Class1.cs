@@ -1,4 +1,4 @@
-﻿namespace BookStoreDataAccess
+﻿namespace BookStore.Utility
 {
     public class Class1
     {
