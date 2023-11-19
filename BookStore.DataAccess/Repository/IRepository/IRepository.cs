@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BookStore.DataAccess.Repository.IRepository
 {
     // Interface giúp giảm bớt sự lặp lại của mã nguồn và tăng tính tái sử dụng.
-    internal interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class
     {
         // T -> Category
         // Trả về một danh sách chứa tất cả các đối tượng của lớp T từ cơ sở dữ liệu.
