@@ -3,8 +3,9 @@ using BookStore.DataAccess.Repository.IRepository;
 using BookStore.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStoreWeb.Controllers
+namespace BookStoreWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -24,8 +25,8 @@ namespace BookStoreWeb.Controllers
         }
         [HttpPost]
         public IActionResult Create(Category obj)
-        {   
-            if(obj.Name == obj.DisplayOrder.ToString())
+        {
+            if (obj.Name == obj.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("name", "Thứ tự hiển thị không thể trùng với tên danh mục");
             }
@@ -37,18 +38,18 @@ namespace BookStoreWeb.Controllers
                 return RedirectToAction("Index", "Category"); // View,Controller
             }
             return View();
-           
+
         }
 
         public IActionResult Edit(int? id)
         {
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _unitOfWork.Category.Get(u=>u.Id==id);
-           
-            if(categoryFromDb == null)
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+
+            if (categoryFromDb == null)
             {
                 return NotFound();
             }
@@ -82,7 +83,7 @@ namespace BookStoreWeb.Controllers
             }
             return View(categoryFromDb);
         }
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         public IActionResult POSTDelete(int? id)
         {
             Category? obj = _unitOfWork.Category.Get(u => u.Id == id);
