@@ -6,28 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace BookStore.Models
 {
     public class Product
     {
+      
         [Key]
         public int Id { get; set; }
         [Required]
         //  tiêu đề của sản phẩm
-        public required string Title { get; set; }
+        public  string Title { get; set; }
 
         [Required]
         // mô tả của sản phẩm
-        public required string Description { get; set; }
+        public  string Description { get; set; }
 
         [Required]
         // số ISBN của sách . vạch đen đen phía sau cuốn sách
-        public required string ISBN { get; set; }
+        public  string ISBN { get; set; }
 
         [Required]
         // tên tác giả của sách
-        public required string Author { get; set; }
+        public  string Author { get; set; }
 
         [Required]
         [Display(Name = "List Price")]
@@ -56,7 +58,10 @@ namespace BookStore.Models
 
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
+        [ValidateNever]
         public Category Category { get; set; }
+
+        [ValidateNever]
         public string ImageUrl { get; set; }
     }
 }
