@@ -134,5 +134,15 @@ namespace BookStoreWeb.Areas.Admin.Controllers
 
         }
 
+        #region API CALL
+        [HttpGet]
+
+        public IActionResult GetAll()
+        {
+            List<Product> objProduct = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            return Json(new { data = objProduct });
+        }
+        #endregion
+
     }
 }
