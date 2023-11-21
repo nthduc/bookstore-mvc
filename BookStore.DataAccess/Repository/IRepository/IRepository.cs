@@ -12,11 +12,11 @@ namespace BookStore.DataAccess.Repository.IRepository
     {
         // T -> Category
         // Trả về một danh sách chứa tất cả các đối tượng của lớp T từ cơ sở dữ liệu.
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(string? includeProperties = null);
 
         // Trả về một đối tượng của lớp T dựa trên biểu thức lọc được cung cấp.
         // Biểu thức này sẽ được sử dụng để lọc các đối tượng trong cơ sở dữ liệu.
-        T Get(Expression<Func<T, bool>> filter);
+        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null);
 
         // Thêm một đối tượng mới của lớp T vào cơ sở dữ liệu.
         void Add(T entity);

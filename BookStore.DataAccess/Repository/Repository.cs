@@ -20,6 +20,7 @@ namespace BookStore.DataAccess.Repository
             _db = db;
             this.dbSet = _db.Set<T>();
             // _db.Categories == dbSet
+            _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
         }
         //  Phương thức này thêm một đối tượng mới vào cơ sở dữ liệu.
         void IRepository<T>.Add(T entity)
@@ -28,17 +29,34 @@ namespace BookStore.DataAccess.Repository
         }
 
         // Phương thức này trả về một đối tượng từ cơ sở dữ liệu dựa trên biểu thức lọc được cung cấp.
-        T IRepository<T>.Get(Expression<Func<T, bool>> filter)
+        T IRepository<T>.Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             query = query.Where(filter);
             return query.FirstOrDefault();
         }
 
         // Phương thức này trả về tất cả các đối tượng từ cơ sở dữ liệu.
-        IEnumerable<T> IRepository<T>.GetAll()
+        // Category, CategoryId
+        IEnumerable<T> IRepository<T>.GetAll(string? includeProperties)
         {
             IQueryable<T> query = dbSet;
+            if(!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach(var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 
