@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BookStore.DataAccess.Data;
 using BookStore.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.DataAccess.Repository
 {
@@ -29,9 +30,20 @@ namespace BookStore.DataAccess.Repository
         }
 
         // Phương thức này trả về một đối tượng từ cơ sở dữ liệu dựa trên biểu thức lọc được cung cấp.
-        T IRepository<T>.Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        T IRepository<T>.Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = dbSet;
+
+            }
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
+
+            query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties
@@ -40,18 +52,22 @@ namespace BookStore.DataAccess.Repository
                     query = query.Include(includeProp);
                 }
             }
-            query = query.Where(filter);
             return query.FirstOrDefault();
+
         }
 
         // Phương thức này trả về tất cả các đối tượng từ cơ sở dữ liệu.
         // Category, CategoryId
-        IEnumerable<T> IRepository<T>.GetAll(string? includeProperties)
+        IEnumerable<T> IRepository<T>.GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
-            if(!string.IsNullOrEmpty(includeProperties))
+            if (filter != null)
             {
-                foreach(var includeProp in includeProperties
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
