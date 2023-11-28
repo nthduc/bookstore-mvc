@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreWeb.Areas.Admin.Controllers
 {
+    [Area("admin")]
     public class OrderController : Controller
     {
 
