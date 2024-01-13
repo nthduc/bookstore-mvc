@@ -20,7 +20,7 @@ namespace BookStoreAPI.Controllers
         // GET all shopping carts (giỏ hàng)
         public IActionResult GetShoppingCarts()
         {
-            var shoppingCarts = _unitOfWork.ShoppingCart.GetAll();
+            var shoppingCarts = _unitOfWork.ShoppingCart.GetAll(includeProperties: "ApplicationUser");
             return Ok(shoppingCarts);
         }
 
@@ -28,7 +28,7 @@ namespace BookStoreAPI.Controllers
         // Get a shopping cart by Id
         public IActionResult GetShoppingCart(int id)
         {
-            var shoppingCart = _unitOfWork.ShoppingCart.Get(s => s.Id == id);
+            var shoppingCart = _unitOfWork.ShoppingCart.Get(s => s.Id == id, includeProperties: "ApplicationUser");
             if (shoppingCart == null)
             {
                 return NotFound();
